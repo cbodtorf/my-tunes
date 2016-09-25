@@ -28,9 +28,9 @@
         </thead>
         <tbody>
           <tr ng-repeat="track in tracks">
-            <td>TRACK</td>
-            <td>ARTIST</td>
-            <td>TIME</td>
+            <td><a href="{{ track.preview_url }}" target="myframe">{{ track.name }}</a></td>
+            <td>{{ track.artists[0].name }}</td>
+            <td>{{ timeConversion(track.duration_ms) }}</td>
             <td>ALBUM</td>
           </tr>
         </tbody>
