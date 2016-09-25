@@ -8,6 +8,11 @@ var app = angular.module("MyTunes", [])
 app.controller("TrackController", ["SpotifyService", "$scope", function(SpotifyService, $scope){
   $scope.albums = SpotifyService.getAlbums()
   $scope.tracks = SpotifyService.getTracks()
+  $scope.trackAlbumName = SpotifyService.getTrackAlbumName()
+
+  $scope.sortType     = 'name'; // set the default sort type
+  $scope.sortReverse  = false;  // set the default sort order
+  $scope.search   = '';     // set the default search/filter term
 
   /***********************
   * timeConversion
@@ -27,7 +32,23 @@ app.controller("TrackController", ["SpotifyService", "$scope", function(SpotifyS
     return `${Math.floor(minutes)}:${seconds}`
   }
 
+  $scope.albumName = function(trackId) {
+    // console.log("album id", $scope.album.id);
+    // console.log("trackid", trackId);
+    // console.log("alb", $scope.trackAlbumName);
+    // $scope.trackAlbumName.forEach(function(album, i){
+    //   // console.log("1",$scope.albums[i].href + "/tracks?offset=0&limit=50");
+    //   // console.log("2",album.href);
+    //   if(album.href === ($scope.albums[i].href + "/tracks?offset=0&limit=50")) {
+    //     console.log("what", $scope.albums[i].name);
+    //     return $scope.albums[i].name
+    //   }
+    // })
+  }
+
+
 }])
+
 
 app.factory("SpotifyService", ["$http", function($http){
   /***********************
@@ -41,23 +62,43 @@ app.factory("SpotifyService", ["$http", function($http){
   var albumId = ["0uxYCpg9exHWSOmkXAMATU", "4X7r3ED9NDWYSfs7qEI094", "5T3OKyxLyY5KcvBe7B5ngB", "7EDOQJftQyLr0LmZTRKCFS"]
   var albums = []
   var tracks = []
+  var albumNames = []
 
+  /***********************
+  * Requests an album for each id. album pushed into array.
+  * (.then) Extracts tracks from album and pushes each track to different array.
+  * --- *
+  * @param (str) spotify's unique album id
+  ************************/
   albumId.forEach(function(id){
 
     $http({
-      url: `https://api.spotify.com/v1/albums/${id}/tracks`,
+      url: `https://api.spotify.com/v1/albums/${id}`,
       method: "GET",
     }).then(function(response){
       var album = response.data
       albums.push(angular.copy(album))
+      console.log("album", album);
 
-      var track = album.items;
-      track.forEach(function(e){
-        tracks.push(angular.copy(e))
-        console.log(e);
-      })
+        $http({
+          url: `${album.tracks.href}`,
+          method: "GET",
+        }).then(function(response){
+          data = response.data
+          console.log("tracks", data);
+
+          albumNames.push(angular.copy(data))
+          data.items.forEach(function(track){
+            tracks.push(angular.copy(track))
+          })
+        })
+
     })
+
   })
+
+
+
 
 
   return {
@@ -70,6 +111,10 @@ app.factory("SpotifyService", ["$http", function($http){
     getTracks: function() {
 
       return tracks
+    },
+    getTrackAlbumName: function() {
+
+      return albumNames
     }
   }
 }])

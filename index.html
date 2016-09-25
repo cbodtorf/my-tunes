@@ -10,28 +10,56 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.js"></script>
   </head>
   <body>
-    <h1>Tunes</h1>
     <div ng-controller="TrackController" class="container">
+      <h1 class="header">Tunes</h1>
       <iframe name="myframe" width="100%" height="75" style="border: none"></iframe>
-      <table class="table table-bordered">
-        <thead>
+
+      <form>
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+
+            <input type="text" class="form-control" placeholder="Search" ng-model="search">
+
+          </div>
+        </div>
+      </form>
+
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="">
           <tr>
-            <td>TRACK</td>
-            <td>ARTIST</td>
-            <td>TIME</td>
-            <td>ALBUM</td>
+            <td>
+              <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">TRACK
+                <span ng-show="sortType == 'name'" class="fa fa-caret-down"></span>
+              </a></td>
+            <td>
+              <a href="#" ng-click="sortType = 'artist'; sortReverse = !sortReverse">ARTIST
+              <span ng-show="sortType == 'artist'" class="fa fa-caret-down"></span>
+              </a>
+            </td>
+            <td>
+              <a href="#" ng-click="sortType = 'time'; sortReverse = !sortReverse">TIME
+                <span ng-show="sortType == 'time'" class="fa fa-caret-down"></span>
+              </a>
+            </td>
+            <td>
+              <a href="#" ng-click="sortType = 'album'; sortReverse = !sortReverse">ALBUM
+                <span ng-show="sortType == 'album'" class="fa fa-caret-down"></span>
+              </a>
+            </td>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="track in tracks">
+          <tr ng-repeat="track in tracks | orderBy:sortType:sortReverse | filter:search">
             <td><a href="{{ track.preview_url }}" target="myframe">{{ track.name }}</a></td>
             <td>{{ track.artists[0].name }}</td>
             <td>{{ timeConversion(track.duration_ms) }}</td>
-            <td>ALBUM</td>
+            <td>{{ albumName(tracks.id) }}</td>
           </tr>
         </tbody>
       </table>
