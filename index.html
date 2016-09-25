@@ -35,21 +35,25 @@
           <tr>
             <td>
               <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">TRACK
-                <span ng-show="sortType == 'name'" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
               </a></td>
             <td>
               <a href="#" ng-click="sortType = 'artist'; sortReverse = !sortReverse">ARTIST
-              <span ng-show="sortType == 'artist'" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'artist' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'artist' && sortReverse" class="fa fa-caret-up"></span>
               </a>
             </td>
             <td>
               <a href="#" ng-click="sortType = 'time'; sortReverse = !sortReverse">TIME
-                <span ng-show="sortType == 'time'" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'time' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'time' && sortReverse" class="fa fa-caret-up"></span>
               </a>
             </td>
             <td>
               <a href="#" ng-click="sortType = 'album'; sortReverse = !sortReverse">ALBUM
-                <span ng-show="sortType == 'album'" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'album' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'album' && sortReverse" class="fa fa-caret-up"></span>
               </a>
             </td>
           </tr>
